@@ -5,9 +5,12 @@
         private string firstValue;
         private string secondValue;
         private string previousTextBox2;
+
         private bool isResult = false;
         private bool isOperation = false;
         private bool isInput = false;
+        private bool isReverted = false;
+
         private double textBox2Value;
 
         private RegularOperation currentOperation = RegularOperation.Null;
@@ -47,7 +50,10 @@
             }
 
             if (currentOperation != RegularOperation.Null)
+            {
                 secondValue += inputValue;
+
+            }
         }
 
         private void RevertInputValue(object sender, EventArgs e)
@@ -55,10 +61,10 @@
             if (textBox1.Text != string.Empty)
             {
                 textBox1.Text = (double.Parse(textBox1.Text) * (-1)).ToString();
-                //if (firstValue != null)
-
-
+                isReverted = true;
             }
+            if (currentOperation != RegularOperation.Null)
+                secondValue = (textBox1.Text);
         }
 
         private void RegularOperationButtonClick(object sender, EventArgs e)
@@ -77,6 +83,9 @@
                 };
 
                 textBox2.Text = previousTextBox2 + operation;
+
+                if (textBox2.Text.StartsWith(operation))
+                    textBox2.Text = string.Empty;
             }
             else
             {
@@ -102,8 +111,10 @@
                 textBox2.Text += textBox1.Text + operation;
                 textBox1.Text = string.Empty;
                 isOperation = true;
-
+                isReverted = false;
             }
+
+
 
         }
 
