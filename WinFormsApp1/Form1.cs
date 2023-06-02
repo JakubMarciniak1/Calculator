@@ -4,8 +4,10 @@
     {
         private string firstValue;
         private string secondValue;
+        private string previousTextBox2;
         private bool isResult = false;
         private bool isOperation = false;
+        private bool isInput = false;
         private double textBox2Value;
 
         private RegularOperation currentOperation = RegularOperation.Null;
@@ -23,6 +25,7 @@
 
         private void InputButtonClick(object sender, EventArgs e)
         {
+            isInput = true;
             var inputValue = (sender as Button).Text;
 
             if (isResult)
@@ -54,35 +57,53 @@
                 textBox1.Text = (double.Parse(textBox1.Text) * (-1)).ToString();
                 //if (firstValue != null)
 
-                    
+
             }
         }
 
         private void RegularOperationButtonClick(object sender, EventArgs e)
         {
-            if (isOperation)
-            {
-                textBox2Value = PerformRegularOperation(currentOperation);
-                firstValue = textBox2Value.ToString();
-            }
-            else
-                firstValue = textBox1.Text;
-
             var operation = (sender as Button).Text;
 
-            currentOperation = operation switch
+            if (!isInput)
             {
-                "+" => RegularOperation.Addition,
-                "-" => RegularOperation.Substraction,
-                "-/-" => RegularOperation.Division,
-                "x" => RegularOperation.Multiplication,
-                _ => RegularOperation.Null
-            };
+                currentOperation = operation switch
+                {
+                    "+" => RegularOperation.Addition,
+                    "-" => RegularOperation.Substraction,
+                    "-/-" => RegularOperation.Division,
+                    "x" => RegularOperation.Multiplication,
+                    _ => RegularOperation.Null
+                };
 
+                textBox2.Text = previousTextBox2 + operation;
+            }
+            else
+            {
+                isInput = false;
+                if (isOperation)
+                {
+                    textBox2Value = PerformRegularOperation(currentOperation);
+                    firstValue = textBox2Value.ToString();
+                }
+                else
+                    firstValue = textBox1.Text;
 
-            textBox2.Text += textBox1.Text + operation;
-            textBox1.Text = string.Empty;
-            isOperation = true;
+                currentOperation = operation switch
+                {
+                    "+" => RegularOperation.Addition,
+                    "-" => RegularOperation.Substraction,
+                    "-/-" => RegularOperation.Division,
+                    "x" => RegularOperation.Multiplication,
+                    _ => RegularOperation.Null
+                };
+
+                previousTextBox2 = textBox1.Text;
+                textBox2.Text += textBox1.Text + operation;
+                textBox1.Text = string.Empty;
+                isOperation = true;
+
+            }
 
         }
 
