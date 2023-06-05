@@ -9,7 +9,6 @@
         private bool isResult = false;
         private bool isOperation = false;
         private bool isInput = false;
-        private bool isReverted = false;
 
         private double textBox2Value;
 
@@ -25,6 +24,8 @@
         {
 
         }
+
+
 
         private void InputButtonClick(object sender, EventArgs e)
         {
@@ -50,19 +51,25 @@
             }
 
             if (currentOperation != RegularOperation.Null)
-            {
                 secondValue += inputValue;
-
-            }
         }
 
-        private void RevertInputValue(object sender, EventArgs e)
+        private void RevertLastInputComponent(object sender, EventArgs e)
+        {
+            if (textBox1.Text == string.Empty)
+                return;
+            string revertedTextBoX = textBox1.Text.Remove(textBox1.Text.Length - 1, 1);
+            if (revertedTextBoX == string.Empty)
+                isInput = false;
+            textBox1.Text = revertedTextBoX;
+            if (currentOperation != RegularOperation.Null)
+                secondValue = (textBox1.Text);
+        }
+
+        private void NegateInputValue(object sender, EventArgs e)
         {
             if (textBox1.Text != string.Empty)
-            {
                 textBox1.Text = (double.Parse(textBox1.Text) * (-1)).ToString();
-                isReverted = true;
-            }
             if (currentOperation != RegularOperation.Null)
                 secondValue = (textBox1.Text);
         }
@@ -111,7 +118,6 @@
                 textBox2.Text += textBox1.Text + operation;
                 textBox1.Text = string.Empty;
                 isOperation = true;
-                isReverted = false;
             }
 
 

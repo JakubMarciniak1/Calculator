@@ -289,7 +289,7 @@
             button17.TabIndex = 17;
             button17.Text = "+/-";
             button17.UseVisualStyleBackColor = false;
-            button17.Click += RevertInputValue;
+            button17.Click += NegateInputValue;
             // 
             // button18
             // 
@@ -378,6 +378,7 @@
             button24.TabIndex = 24;
             button24.Text = "BACK";
             button24.UseVisualStyleBackColor = false;
+            button24.Click += RevertLastInputComponent;
             // 
             // button25
             // 
