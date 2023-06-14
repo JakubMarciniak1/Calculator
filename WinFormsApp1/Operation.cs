@@ -20,8 +20,7 @@ namespace WinFormsApp1
         Null,
         Power,
         Root,
-        Fraction,
-        Negative,
+        Percentage,
     }
 
 

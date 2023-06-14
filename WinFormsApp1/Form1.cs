@@ -13,6 +13,7 @@
         private double textBox2Value;
 
         private RegularOperation currentOperation = RegularOperation.Null;
+        private AdvanceOperation advanceOperation = AdvanceOperation.Null;
 
 
         public Form1()
@@ -30,7 +31,7 @@
         private void InputButtonClick(object sender, EventArgs e)
         {
             isInput = true;
-            var inputValue = (sender as Button).Text;
+            var inputValue = ((Button)sender).Text;
 
             if (isResult)
             {
@@ -76,7 +77,7 @@
 
         private void RegularOperationButtonClick(object sender, EventArgs e)
         {
-            var operation = (sender as Button).Text;
+            var operation = ((Button)sender).Text;
 
             if (!isInput)
             {
@@ -114,19 +115,16 @@
                     _ => RegularOperation.Null
                 };
 
-                previousTextBox2 = textBox1.Text;
+                previousTextBox2 = textBox2.Text + textBox1.Text;
                 textBox2.Text += textBox1.Text + operation;
                 textBox1.Text = string.Empty;
                 isOperation = true;
             }
-
-
-
         }
 
         private void ResultButtonClick(object sender, EventArgs e)
         {
-            if (firstValue == null)
+            if (firstValue == null || (isOperation && textBox1.Text == string.Empty))
                 return;
 
             var result = PerformRegularOperation(currentOperation);
@@ -139,6 +137,22 @@
         }
 
         private void ClearButtonClick(object sender, EventArgs e)
+        {
+            firstValue = null;
+            secondValue = null;
+            previousTextBox2 = null;
+            isResult = false;
+            isOperation = false;
+            isInput = false;
+            textBox2Value = 0;
+            currentOperation = RegularOperation.Null;
+            advanceOperation = AdvanceOperation.Null;
+
+            textBox1.Text = string.Empty;
+            textBox2.Text = string.Empty;
+        }
+
+        private void ClearFirstTextBoxButtonClick(object sender, EventArgs e)
         {
 
         }
@@ -171,6 +185,65 @@
                         break;
                     }
                     result = firstNumber / secondNumber;
+                    break;
+            }
+
+            secondValue = string.Empty;
+
+            return result;
+        }
+
+        private void AdvanceOperationButtonClick(object sender, EventArgs e)
+        {
+            var operation = (sender as Button).Text;
+
+            if (textBox1.Text == string.Empty && isOperation)
+                return;
+
+            else
+            {
+                isInput = false;
+                if (isOperation)
+                {
+                    textBox2Value = PerformRegularOperation(currentOperation);
+                    firstValue = textBox2Value.ToString();
+                }
+                else
+                    firstValue = textBox1.Text;
+
+                advanceOperation = operation switch
+                {
+                    "√X" => AdvanceOperation.Root,
+                    "X^2" => AdvanceOperation.Power,
+                    "1/X" => AdvanceOperation.Percentage,
+                    _ => AdvanceOperation.Null
+                };
+
+                previousTextBox2 = textBox2.Text + textBox1.Text;
+                textBox2.Text += textBox1.Text + operation;
+                textBox1.Text = string.Empty;
+                isOperation = true;
+            }
+        }
+
+        private double PerformAdvanceOperation(AdvanceOperation advanceOperation)
+        {
+            var firstNumber = double.Parse(firstValue);
+            var result = 0d;
+
+            switch (advanceOperation)
+            {
+                case AdvanceOperation.Power:
+                    result = firstNumber * firstNumber;
+                    break;
+                case AdvanceOperation.Root:
+                    result = Math.Sqrt(firstNumber);
+                    break;
+                case AdvanceOperation.Percentage:
+                    result = 1 / firstNumber;
+                    break;
+                case AdvanceOperation.Null:
+                    result = firstNumber;
                     break;
             }
 

@@ -81,7 +81,7 @@
             button1.TabIndex = 1;
             button1.Text = "1 / X";
             button1.UseVisualStyleBackColor = false;
-            button1.Click += RegularOperationButtonClick;
+            button1.Click += AdvanceOperationButtonClick;
             // 
             // button2
             // 
@@ -94,7 +94,7 @@
             button2.TabIndex = 2;
             button2.Text = "X^2";
             button2.UseVisualStyleBackColor = false;
-            button2.Click += RegularOperationButtonClick;
+            button2.Click += AdvanceOperationButtonClick;
             // 
             // button3
             // 
@@ -107,7 +107,7 @@
             button3.TabIndex = 3;
             button3.Text = "√X";
             button3.UseVisualStyleBackColor = false;
-            button3.Click += RegularOperationButtonClick;
+            button3.Click += AdvanceOperationButtonClick;
             // 
             // button4
             // 
@@ -341,6 +341,7 @@
             button21.TabIndex = 21;
             button21.Text = "%";
             button21.UseVisualStyleBackColor = false;
+            button21.Click += AdvanceOperationButtonClick;
             // 
             // button22
             // 
@@ -353,6 +354,7 @@
             button22.TabIndex = 22;
             button22.Text = "CE";
             button22.UseVisualStyleBackColor = false;
+            button22.Click += ClearFirstTextBoxButtonClick;
             // 
             // button23
             // 
