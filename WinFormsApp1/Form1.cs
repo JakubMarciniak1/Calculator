@@ -12,6 +12,7 @@
         private bool isNegated = false;
 
         private double textBox2Value;
+        private double previousResultValue;
 
         private RegularOperation currentOperation = RegularOperation.Null;
         private AdvanceOperation advanceOperation = AdvanceOperation.Null;
@@ -49,11 +50,14 @@
             if (textBox1.Text.StartsWith(","))
             {
                 textBox1.Text = "0,";
+                if (currentOperation != RegularOperation.Null)
+                    secondValue = "0";
                 return;
             }
 
             if (currentOperation != RegularOperation.Null)
                 secondValue += inputValue;
+                
 
         }
 
@@ -148,9 +152,33 @@
             isOperation = false;
             isResult = true;
             isNegated = false;
+
+            previousResultValue = result;
     }
 
         private void ClearButtonClick(object sender, EventArgs e)
+        {
+            Clear();
+            textBox1.Text = string.Empty;
+            textBox2.Text = string.Empty;
+        }
+
+        private void ClearFirstTextBoxButtonClick(object sender, EventArgs e)
+        {
+            if (previousResultValue != null)
+            {
+                textBox2.Text = previousResultValue.ToString();
+                textBox1.Text = string.Empty;
+            }
+            else
+            {
+                Clear();
+                textBox1.Text = string.Empty;
+                textBox2.Text = string.Empty;
+            }
+        }
+
+        private void Clear()
         {
             firstValue = null;
             secondValue = null;
@@ -162,15 +190,9 @@
             textBox2Value = 0;
             currentOperation = RegularOperation.Null;
             advanceOperation = AdvanceOperation.Null;
-
-            textBox1.Text = string.Empty;
-            textBox2.Text = string.Empty;
         }
 
-        private void ClearFirstTextBoxButtonClick(object sender, EventArgs e)
-        {
-
-        }
+        
 
 
         private double PerformRegularOperation(RegularOperation currentOperation)
@@ -212,19 +234,11 @@
         {
             var operation = (sender as Button).Text;
 
-            if (textBox1.Text == string.Empty && isOperation)
+            if (textBox1.Text == string.Empty)
                 return;
-
             else
             {
-                isInput = false;
-                if (isOperation)
-                {
-                    textBox2Value = PerformRegularOperation(currentOperation);
-                    firstValue = textBox2Value.ToString();
-                }
-                else
-                    firstValue = textBox1.Text;
+
 
                 advanceOperation = operation switch
                 {
