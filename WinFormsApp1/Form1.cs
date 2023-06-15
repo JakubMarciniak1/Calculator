@@ -9,6 +9,7 @@
         private bool isResult = false;
         private bool isOperation = false;
         private bool isInput = false;
+        private bool isNegated = false;
 
         private double textBox2Value;
 
@@ -53,6 +54,7 @@
 
             if (currentOperation != RegularOperation.Null)
                 secondValue += inputValue;
+
         }
 
         private void RevertLastInputComponent(object sender, EventArgs e)
@@ -70,14 +72,25 @@
         private void NegateInputValue(object sender, EventArgs e)
         {
             if (textBox1.Text != string.Empty)
-                textBox1.Text = (double.Parse(textBox1.Text) * (-1)).ToString();
+                if (textBox1.Text == "0," || textBox1.Text == "0")
+                    textBox1.Text = "0";
+                else
+                    textBox1.Text = (double.Parse(textBox1.Text) * (-1)).ToString();
             if (currentOperation != RegularOperation.Null)
                 secondValue = (textBox1.Text);
+            isNegated = true;
         }
 
         private void RegularOperationButtonClick(object sender, EventArgs e)
         {
             var operation = ((Button)sender).Text;
+
+            if (textBox1.Text.EndsWith(","))
+            {
+                string revertedTextBoX = textBox1.Text.Remove(textBox1.Text.Length - 1, 1);
+                textBox1.Text = revertedTextBoX;
+            }
+       
 
             if (!isInput)
             {
@@ -92,7 +105,7 @@
 
                 textBox2.Text = previousTextBox2 + operation;
 
-                if (textBox2.Text.StartsWith(operation))
+                if (textBox2.Text.StartsWith(operation) && !isNegated)
                     textBox2.Text = string.Empty;
             }
             else
@@ -134,7 +147,8 @@
             secondValue = string.Empty;
             isOperation = false;
             isResult = true;
-        }
+            isNegated = false;
+    }
 
         private void ClearButtonClick(object sender, EventArgs e)
         {
@@ -144,6 +158,7 @@
             isResult = false;
             isOperation = false;
             isInput = false;
+            isNegated = false;
             textBox2Value = 0;
             currentOperation = RegularOperation.Null;
             advanceOperation = AdvanceOperation.Null;
